@@ -1,0 +1,39 @@
+//--------------------------------
+//------- Code de base -----------
+//--------------------------------
+
+global a = 18;
+global b = 17;
+global center = 306;
+
+function getCoordinates(cn) {
+// solve ax + by + center = cellNumber
+	var x1 = (cn-center)%b;
+	var x2;
+	if (x1 > 0) x2 = (cn-center)%b - b;
+	else x2 = (cn-center)%b + b;
+
+	var y1 = (center-cn)%a;
+	var y2;
+	if (y1 > 0) y2 = (center-cn)%a - a;
+	else y2 = (center-cn)%a + a;
+
+	var tab = [[x1,y1], [x1,y2], [x2,y1], [x2,y2]];
+	//debug("tab : " + tab);
+	for (var cp in tab) {
+		if (getCellFromXY(cp[0], cp[1]) === cn) return cp;
+	}
+	return [null,null];
+}
+
+function distance(c1, c2) {
+	if (c1[0]===null) return;
+	if (c2[0]===null) return;
+	return hypot(c1[0]-c2[0], c1[1]-c2[1]);
+}
+
+function getSteps(c1, c2) {
+	if (c1[0]===null) return;
+	if (c2[0]===null) return;
+	return abs(c1[0]-c2[0])+abs(c1[1]-c2[1]);
+}

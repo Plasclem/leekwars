@@ -1,0 +1,47 @@
+include("Fonctions");
+//--------------------------------
+//------- Code de base -----------
+//--------------------------------
+
+
+var enemy = getNearestEnemy();
+
+var enemyMP = getTotalMP(enemy);
+//debug("enemmy id : " + enemy);
+var selfCell = getCell();
+var xy = getCoordinates(selfCell);
+//debug("my position cell number: " + selfCell);
+//debug("my position cartesian coordinates : " + xy);
+
+var inRangeCell = getCellToUseWeapon(WEAPON_PISTOL, enemy);
+var inRangeCoord = getCoordinates(inRangeCell);
+var steps = getSteps(xy, inRangeCoord);
+debug("Steps to get in range: " + steps);
+
+global move = true;
+if (move) {
+	moveToward(enemy);
+	move = false;
+}
+
+
+var currentMP = getMP();
+debug("initial mp this turn : " + currentMP);
+
+if (steps>currentMP) {
+	say("I will find you, and I will kill you!");
+	return;
+}
+else {
+	var mp = moveToward(enemy, steps);
+	debug("Used " + mp + " move points");
+	setWeapon(WEAPON_PISTOL); // 1TP
+
+	var shots = 0;
+	while (shots < 4) {
+		useWeapon(enemy);
+		shots += 1;
+		debug("Shots fired: " + shots + " TP remaining: " + getTP());
+	}
+	if (getTP()>0) say("At least give me a good fight, scrub!");
+}
